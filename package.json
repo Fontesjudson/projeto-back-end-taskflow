@@ -1,7 +1,18 @@
 {
+<<<<<<< HEAD
   "name": "taskflow-api",
   "version": "1.0.0",
   "description": "",
+=======
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "name": "taskflow.api",
+  "version": "1.0.0",
+>>>>>>> 7463780 (taskflow API - semana 9 completa)
   "main": "server.js",
   "scripts": {
     "dev": "nodemon server.js",
@@ -11,6 +22,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+<<<<<<< HEAD
   "type": "commonjs",
   "devDependencies": {
     "nodemon": "^3.1.14"
@@ -21,4 +33,7 @@
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3"
   }
+=======
+  "description": ""
+>>>>>>> 7463780 (taskflow API - semana 9 completa)
 }
