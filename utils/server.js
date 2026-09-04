@@ -1,13 +1,14 @@
 const express = require('express');
 const tarefasRoutes = require('./src/routes/tarefas.routes');
+const usuariosRoutes = require('./src/routes/usuarios.routes');
+const projetosRoutes = require('./src/routes/projetos.routes');
+
 const app = express();
 const PORTA = 3001;
-require('./src/controllers/tarefas.controllers');
-
 app.use(express.json());
 
+app.use('/usuarios', usuariosRoutes);
 app.use('/tarefas', tarefasRoutes);
-
 app.use('/projetos',projetosRoutes);
 
 app.use((req, res) => {

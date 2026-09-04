@@ -11,8 +11,21 @@ module.exports = {
     buscar: (id) => tarefas.find(t => t.id === id),
     
     adicionar: ({ titulo, prioridade, coluna }) => {
-        const nova = { id: proximoId++, titulo, prioridade, coluna };
+        const nova = { id: proximoId++, titulo, prioridade: prioridade || 'afazer', coluna: coluna || 'a fazer' };
         tarefas.push(nova);
         return nova;
-    }
+    },
+
+ atualizar: (id, dados) => {
+    const idx = tarefas.findIndex(t => t.id === id);
+    if (idx === -1) return null;
+    tarefas[idx] = {...tarefas[idx], ...dados, id};
+    return tarefas[idx];
+ },
+ 
+ remover: (id) => {
+    constidx = tarefas.findIndex(t => t.id === id);
+    if (idx === -1) return null;
+    return tarefas.splice(idx, 1)[0];
+ },
 };

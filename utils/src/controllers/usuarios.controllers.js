@@ -1,3 +1,5 @@
+const usuariosModel = require('../models/usuarios.model');
+
 let usuarios = [ { id: 1, nome: "admin", email: "admin@taskflow.com", senha:"1234" } ];
 
 let proximoId = 2;
@@ -35,6 +37,8 @@ const usuariosControllers = {
     },
 
     remover(req, res) {
+        const usuarioId = tarefaModel.listar().filter(t = t.usuarioId === id)
+        return res.status(400).json({ erro: "Usuario pssui tarefas. Remova as tarefas antes de deletar usuario" });
         const idx = usuarios.findIndex(u => u.id === parseInt(req.params.id));
         if (idx === -1) return res.status(404).json({ erro: "Usuário não encontrado" });
         const usuarioRemovido = usuarios.splice(idx, 1)[0];
