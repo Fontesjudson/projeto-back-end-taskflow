@@ -1,3 +1,6 @@
+const express = require('express');
+const router = express.Router();
+
 const projetosController = require('../controllers/projetos.controllers');
 
 let projetos = [ { id: 1, descriçao: "teste", ativo: true }]

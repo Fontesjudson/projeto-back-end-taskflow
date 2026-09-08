@@ -1,3 +1,6 @@
+const express = require('express');
+const router = express.Router();
+
 let tarefas = [ { id: 1, titulo: "Estudar Node.js", prioridade: "alta", coluna: "a fazer" }, 
                 { id: 2, titulo: "Criar API", prioridade: "alta", coluna: "em andamento" },
                 { id: 3, titulo: "Testar Postman", prioridade: "média", coluna: "concluída" }];
@@ -31,6 +34,9 @@ const tarefasControllers = {
 
         if (prioridade && !prioridades.includes(prioridade)) {
             return res.status(400).json({ error: "Prioridade inválida. Use 'alta', 'média' ou 'baixa'." });
+        }
+        if (!coluna || !["a fazer", "em andamento", "concluída"].includes(coluna)) {
+            return res.status(400).json({ error: "Coluna inválida. Use 'a fazer', 'em andamento' ou 'concluída'." });
         }
         if (!titulo ) return res.status(400).json({ error: "Título e usuário obrigatórios" });
         if (!usuarioId) return res.status(400).json({ error: "Usuário não encontrado" });

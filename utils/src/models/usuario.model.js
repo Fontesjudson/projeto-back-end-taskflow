@@ -1,3 +1,6 @@
+const express = require('express');
+const router = express.Router();
+
 let usuarios = [ { id: 1, nome: "admin", email: "admin@taskflow.com", senha: "1234" } ];
 let proximoId = 2;
 

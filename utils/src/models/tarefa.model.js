@@ -1,3 +1,6 @@
+const express = require('express');
+const router = express.Router();
+
 let tarefas = [ { id: 1, titulo: "Estudar Node.js", prioridade: "alta", coluna: "andamento" },
                 { id: 2, titulo: "Criar API", prioridade: "média", coluna: "a fazer" },
                 { id: 3, titulo: "Testar Postman", prioridade: "média", coluna: "concluída"}

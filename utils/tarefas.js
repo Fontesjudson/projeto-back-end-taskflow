@@ -1,8 +1,14 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 let tarefas = [];
 let proximoId = 1;
 
 =======
+=======
+const express = require('express');
+const router = express.Router();
+
+>>>>>>> 13d29b6 (S11 dia 1 - middlewares de log e Content-Type)
 const tarefas = [];
 >>>>>>> 7463780 (taskflow API - semana 9 completa)
  function listarTodas() {

@@ -1,3 +1,6 @@
+const express = require('express');
+const router = express.Router();
+
 const usuariosModel = require('../models/usuarios.model');
 
 let usuarios = [ { id: 1, nome: "admin", email: "admin@taskflow.com", senha:"1234" } ];
