@@ -30,7 +30,11 @@ const tarefasController = {
 
   criar(req, res) {
     const { texto, prioridade, coluna, usuarioId } = req.body;
+<<<<<<< HEAD
     const dados ={...req.body,usuarioId: req.usuario.id};
+=======
+
+>>>>>>> 421cb10 (MVC S11 dia 2 finalizado)
     if (!texto)
       return res.status(400).json({ erro: 'O campo texto é obrigatório' });
 
@@ -51,7 +55,11 @@ const tarefasController = {
         });
     }
 
+<<<<<<< HEAD
     res.status(201).json(tarefaModel.adicionar(dados));
+=======
+    res.status(201).json(tarefaModel.adicionar(req.body));
+>>>>>>> 421cb10 (MVC S11 dia 2 finalizado)
   },
 
   atualizar(req, res) {
