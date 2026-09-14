@@ -30,6 +30,7 @@ const tarefasController = {
 
   criar(req, res) {
 <<<<<<< HEAD
+<<<<<<< HEAD
     const { texto, prioridade, coluna, usuarioId } = req.body;
 <<<<<<< HEAD
     const dados ={...req.body,usuarioId: req.usuario.id};
@@ -39,6 +40,10 @@ const tarefasController = {
 >>>>>>> 9d359ef (S11 dia 4 - autenticação jwt e rotas protegidas)
 
 >>>>>>> 421cb10 (MVC S11 dia 2 finalizado)
+=======
+    const { texto, prioridade, coluna, usuarioId } = req.body;
+    const dados ={...req.body,usuarioId: req.usuario.id};
+>>>>>>> 8442be0 (.v)
     if (!texto)
       return res.status(400).json({ erro: 'O campo texto é obrigatório' });
 
@@ -60,15 +65,19 @@ const tarefasController = {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     res.status(201).json(tarefaModel.adicionar(dados));
 =======
     res.status(201).json(tarefaModel.adicionar(req.body));
 >>>>>>> 421cb10 (MVC S11 dia 2 finalizado)
+=======
+    res.status(201).json(tarefaModel.adicionar(dados));
+>>>>>>> 8442be0 (.v)
   },
 
   atualizar(req, res) {
     const id = parseInt(req.params.id);
-    const { prioridade, coluna, usuarioId } = req.usuario.id;
+    const { prioridade, coluna, usuarioId } = req.body;
 
     if (prioridade && !PRIORIDADES_VALIDAS.includes(prioridade))
       return res.status(400).json({ erro: 'Prioridade inválida. Use: alta, media ou baixa' });
