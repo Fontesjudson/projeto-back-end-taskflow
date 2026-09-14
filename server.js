@@ -6,7 +6,11 @@ const express = require('express');
 const cors = require('cors');
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 const autenticar = require('./src/middlewares/autenticar');
+=======
+const autenticar = require('/src/middlewares/autenticar');
+>>>>>>> 9d359ef (S11 dia 4 - autenticação jwt e rotas protegidas)
 const authRoutes = require('./src/routes/auth.routes');
 // const tarefasRoutes = require('./src/routes/tarefas.routes');
 const usuariosRoutes = require('./src/routes/usuarios.routes');
@@ -45,7 +49,7 @@ const temporizador = require('./src/middlewares/temporizador');
 const corsMiddleware = require('./src/middlewares/corsMiddlewares')
 
 const app = express();
-const PORTA = 3000;
+const PORTA = 3001;
 
 app.use(cors({
     origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
@@ -73,6 +77,7 @@ app.get('/', (req, res) => {
 <<<<<<< HEAD
 app.use('/auth', authRoutes);
 app.use('/usuarios', autenticar, usuariosRoutes);
+<<<<<<< HEAD
 // app.use('/tarefas', autenticar, tarefasRoutes);
 app.use('/projetos', autenticar, projetosRoutes);
 
@@ -91,6 +96,10 @@ app.use('/auth', authRoutes);
 app.use('/usuarios', usuariosRoutes);
 app.use('/tarefas', tarefasRoutes);
 app.use('/projetos',projetosRoutes);
+=======
+app.use('/tarefas', autenticar, tarefasRoutes);
+app.use('/projetos', autenticar, projetosRoutes);
+>>>>>>> 9d359ef (S11 dia 4 - autenticação jwt e rotas protegidas)
 
 app.use((req, res) => {
     res.status(404).json({

@@ -29,10 +29,14 @@ const tarefasController = {
   },
 
   criar(req, res) {
+<<<<<<< HEAD
     const { texto, prioridade, coluna, usuarioId } = req.body;
 <<<<<<< HEAD
     const dados ={...req.body,usuarioId: req.usuario.id};
 =======
+=======
+    const { texto, prioridade, coluna, usuarioId } = req.usuario.id;
+>>>>>>> 9d359ef (S11 dia 4 - autenticação jwt e rotas protegidas)
 
 >>>>>>> 421cb10 (MVC S11 dia 2 finalizado)
     if (!texto)
@@ -64,7 +68,7 @@ const tarefasController = {
 
   atualizar(req, res) {
     const id = parseInt(req.params.id);
-    const { prioridade, coluna, usuarioId } = req.body;
+    const { prioridade, coluna, usuarioId } = req.usuario.id;
 
     if (prioridade && !PRIORIDADES_VALIDAS.includes(prioridade))
       return res.status(400).json({ erro: 'Prioridade inválida. Use: alta, media ou baixa' });
