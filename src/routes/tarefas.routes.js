@@ -7,6 +7,7 @@ const validar = require('../middlewares/validar');
 const schemas = require('../middlewares/schemas');
 const tarefasController = require('../controllers/tarefas.controllers')
 //const autenticar = require('../middlewares/autenticar')
+<<<<<<< HEAD
 =======
 =======
 
@@ -15,6 +16,8 @@ const schemas = require('../middlewares/schemas');
 >>>>>>> 489a66a (MVC S11 dia 3 finalizado)
 const tarefasController = require('../controllers/tarefas.controller');
 >>>>>>> 421cb10 (MVC S11 dia 2 finalizado)
+=======
+>>>>>>> 6f4990e (S12 dia 4 finalizado)
 
 router.get('/estatisticas', tarefasController.estatisticas);
 router.get('/resumo', tarefasController.resumo)
@@ -23,10 +26,18 @@ router.get('/', tarefasController.listar);
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+// router.post('/', autenticar, validar(schemas.usuario), usuariosController.criar);
+// router.put(autenticar, '/:id', validar(schemas.usuario),usuariosController.atualizar);
+// router.delete('/:id', autenticar, tarefasController.remover);
+
+>>>>>>> 6f4990e (S12 dia 4 finalizado)
 router.post('/',  validar(schemas.usuario), tarefasController.criar);
 router.put('/:id', validar(schemas.usuario),tarefasController.atualizar);
 router.delete('/:id', tarefasController.remover);
 
+<<<<<<< HEAD
 =======
 router.post('/', tarefasController.criar);
 router.put('/:id', tarefasController.atualizar);
@@ -41,6 +52,8 @@ router.post('/', autenticar, validar(schemas.usuario), usuariosController.criar)
 router.put(autenticar, '/:id', validar(schemas.usuario),usuariosController.atualizar);
 router.delete('/:id', autenticar, tarefasController.remover);
 >>>>>>> 9d359ef (S11 dia 4 - autenticação jwt e rotas protegidas)
+=======
+>>>>>>> 6f4990e (S12 dia 4 finalizado)
 router.get('/:id', tarefasController.buscarPorId);
 
 module.exports = router;

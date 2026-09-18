@@ -1,4 +1,4 @@
-const projetoModel = require('../models/projeto.model');
+const projetoModel = require('../models/projetos.model');
 const tarefaModel  = require('../models/tarefa.model');
 
 const projetosController = {
