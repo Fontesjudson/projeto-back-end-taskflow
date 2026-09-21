@@ -27,12 +27,15 @@ router.get('/', tarefasController.listar);
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 // router.post('/', autenticar, validar(schemas.usuario), usuariosController.criar);
 // router.put(autenticar, '/:id', validar(schemas.usuario),usuariosController.atualizar);
 // router.delete('/:id', autenticar, tarefasController.remover);
 
 >>>>>>> 6f4990e (S12 dia 4 finalizado)
+=======
+>>>>>>> c08ecd7 (...)
 router.post('/',  validar(schemas.usuario), tarefasController.criar);
 router.put('/:id', validar(schemas.usuario),tarefasController.atualizar);
 router.delete('/:id', tarefasController.remover);

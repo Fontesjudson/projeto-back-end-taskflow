@@ -14,10 +14,10 @@ function autenticar(req, res, next) {
         const payload = jwt.verify(token, process.env.JWT_SECRET);
         req.usuario = payload;
         next();
-} catch (erro) {
-    if (erro.name === 'TokenExpiredError')
-      return res.status(401)
-        .json({ erro: 'Token expirado. Faça login novamente.' });
+       } catch (erro) {
+        if (erro.name === 'TokenExpiredError')
+          return res.status(401)
+          .json({ erro: 'Token expirado. Faça login novamente.' });
 
     return res.status(401).json({ erro: 'Token inválido.' });
   }

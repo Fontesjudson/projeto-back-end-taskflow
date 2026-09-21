@@ -52,7 +52,6 @@ const projetosRoutes = require('./src/routes/projetos.routes');
 const logger = require('./src/middlewares/logger');
 const validarContentType = require('./src/middlewares/validarContentType');
 const temporizador = require('./src/middlewares/temporizador');
-// const corsMiddleware = require('./src/middlewares/corsMiddlewares')
 
 const app = express();
 const PORTA = 3001;
@@ -63,7 +62,6 @@ app.use(cors({
     allowedHeader: ['Content-Type', 'Authorization'],
     
  }));
- // app.use(corsMiddleware);
 app.use(express.json());
 app.use(validarContentType);
 app.use(logger);
