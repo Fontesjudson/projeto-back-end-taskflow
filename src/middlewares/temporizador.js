@@ -1,7 +1,7 @@
 function temporizador(req, res, next) {
   const inicio  = Date.now();
   const metodo  = req.method;
-  const url     = req.originalUrl || req.url; // captura antes do roteamento
+  const url     = req.originalUrl || req.url; 
 
   res.on('finish', () => {
     const duracao = Date.now() - inicio;
