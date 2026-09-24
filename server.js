@@ -16,12 +16,6 @@ const temporizador = require('./src/middlewares/temporizador');
 const app = express();
 const PORTA = 3001;
 
-/*app.use(cors({
-    origin: '*',//process.env.CORS_ORIGIN || 'http://localhost:5173',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeader: ['Content-Type', 'Authorization'],
-    
- }));*/
 app.use(cors());
 app.use(express.json());
 app.use(validarContentType);
