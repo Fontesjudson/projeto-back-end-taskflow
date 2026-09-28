@@ -22,7 +22,13 @@ const PORTA = 3001;
     allowedHeader: ['Content-Type', 'Authorization'],
     
  }));*/
-app.use(cors());
+
+ app.use(cors({
+  origin: 'https://taskflow-henna-nine.vercel.app', // Sua URL da Vercel
+  credentials: true, // Se você usar cookies ou headers de autenticação
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+ }))
+//app.use(cors());
 app.use(express.json());
 app.use(validarContentType);
 app.use(logger);
