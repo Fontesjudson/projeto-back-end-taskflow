@@ -4,8 +4,8 @@ const express = require('express');
 const cors = require('cors');
 
 const autenticar = require('./src/middlewares/autenticar');
-const autenticar = require('/src/middlewares/autenticar');
 const authRoutes = require('./src/routes/auth.routes');
+// const tarefasRoutes = require('./src/routes/tarefas.routes');
 const usuariosRoutes = require('./src/routes/usuarios.routes');
 const projetosRoutes = require('./src/routes/projetos.routes');
 
@@ -16,36 +16,17 @@ const temporizador = require('./src/middlewares/temporizador');
 const app = express();
 const PORTA = 3001;
 
+/*app.use(cors({
+    origin: '*',//process.env.CORS_ORIGIN || 'http://localhost:5173',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeader: ['Content-Type', 'Authorization'],
+    
+ }));*/
 app.use(cors());
 app.use(express.json());
 app.use(validarContentType);
 app.use(logger);
 app.use(temporizador);
-require('dotenv').config();
-
-const express = require('express');
-const cors = require('cors');
-
-
-const authRoutes = require('./src/routes/auth.routes');
-const tarefasRoutes = require('./src/routes/tarefas.routes');
-const autenticar = require('./src/middlewares/autenticar');
-const authRoutes = require('./src/routes/auth.routes');
-const usuariosRoutes = require('./src/routes/usuarios.routes');
-const projetosRoutes = require('./src/routes/projetos.routes');
-
-const logger = require('./src/middlewares/logger');
-const validarContentType = require('./src/middlewares/validarContentType');
-const temporizador = require('./src/middlewares/temporizador');
-
-app.use(cors());
-app.use(express.json());
-app.use(validarContentType);
-app.use(logger);
-
-app.use(express.json());
-app.use(temporizador);
-app.use(corsMiddleware);
 
 app.get('/', (req, res) => {
     res.json({ mensagem: 'TaskFlow API funcionando!' });
@@ -53,22 +34,7 @@ app.get('/', (req, res) => {
 
 app.use('/auth', authRoutes);
 app.use('/usuarios', autenticar, usuariosRoutes);
-app.use('/projetos', autenticar, projetosRoutes);
-
-app.use((req, res) => {
-    res.status(404).json({
-        erro: '*Rota não encontrada*' });
-    });
-
-app.listen(PORTA, () => {
-    console.log(`Servidor rodando em http://localhost:${PORTA}`);
-});
-
-app.use('/auth', authRoutes);
-app.use('/usuarios', usuariosRoutes);
-app.use('/tarefas', tarefasRoutes);
-app.use('/projetos',projetosRoutes);
-app.use('/tarefas', autenticar, tarefasRoutes);
+// app.use('/tarefas', autenticar, tarefasRoutes);
 app.use('/projetos', autenticar, projetosRoutes);
 
 app.use((req, res) => {

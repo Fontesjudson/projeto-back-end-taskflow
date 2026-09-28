@@ -1,12 +1,4 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 let usuarios = [ { id: 1, nome: "Alice", email: "alice@email.com", senha:"123456" } ];
-=======
-let usuarios = [ { id: 1, nome: "admin", email: "admin@taskflow.com" } ];
->>>>>>> 421cb10 (MVC S11 dia 2 finalizado)
-=======
-let usuarios = [ { id: 1, nome: "Alice", email: "alice@email.com", senha:"123456" } ];
->>>>>>> 4f76d16 (MVC S11 dia 4 finalizado)
 let proximoId = 2;
 
 module.exports = {
@@ -14,15 +6,7 @@ module.exports = {
     buscar: (id) => usuarios.find(u => u.id === id),
     buscarPorEmail: (email) => usuarios.find(u => u.email === email),
     adicionar: ({ nome, email, senha }) => {
-<<<<<<< HEAD
-<<<<<<< HEAD
         const novo = { id: proximoId++, nome, email, senha };
-=======
-        const novo = { id: proximoId++, nome, email, };
->>>>>>> 421cb10 (MVC S11 dia 2 finalizado)
-=======
-        const novo = { id: proximoId++, nome, email, senha };
->>>>>>> 4f76d16 (MVC S11 dia 4 finalizado)
         usuarios.push(novo);
         return novo;
     },
