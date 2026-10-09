@@ -1,7 +1,7 @@
 let tarefas = [
-  { id: 1, texto: 'Estudar Node',   prioridade: 'alta',  coluna: 'afazer',    usuarioId: null, projetoId: null, concluidaEm: null },
-  { id: 2, texto: 'Criar API',      prioridade: 'alta',  coluna: 'andamento', usuarioId: null, projetoId: null, concluidaEm: null },
-  { id: 3, texto: 'Testar Postman', prioridade: 'media', coluna: 'concluido', usuarioId: null, projetoId: null, concluidaEm: null },
+  { id: 1, texto: 'Estudar Node',   prioridade: 'alta',  coluna: 'afazer',    usuarioId: 1, projetoId: null, concluidaEm: null },
+  { id: 2, texto: 'Criar API',      prioridade: 'alta',  coluna: 'andamento', usuarioId: 1, projetoId: null, concluidaEm: null },
+  { id: 3, texto: 'Testar Postman', prioridade: 'media', coluna: 'concluido', usuarioId: 1, projetoId: null, concluidaEm: null },
 ];
 let proximoId = 4;
 
