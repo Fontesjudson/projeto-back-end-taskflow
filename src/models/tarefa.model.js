@@ -101,19 +101,6 @@ module.exports = {
     return result.rows[0];
   },
 
-   /* const nova = {
-      id:          proximoId++,
-      texto,
-      prioridade:  prioridade || 'media',
-      coluna:      coluna     || 'afazer',
-      usuarioId:   usuarioId  || null,
-      projetoId:   projetoId  || null,
-      concluidaEm: null,
-    };
-    tarefas.push(nova);
-    return nova;*/
-  
-
   atualizar: async (id, dados) => {
     const { texto, prioridade, coluna, usuarioId } = dados;
     const result = await pool.query(
