@@ -1,26 +1,33 @@
-let usuarios = [ { id: 1, nome: "Alice", email: "alice@email.com", senha:"123456" } ];
-let proximoId = 2;
+/*let usuarios = [ { id: 1, nome: "Alice", email: "alice@email.com", senha:"123456" } ];
+let proximoId = 2;*/
+
+const pool = require('../database/db').pool;
 
 module.exports = {
-    listar: () => usuarios,
-    buscar: (id) => usuarios.find(u => u.id === id),
-    buscarPorEmail: (email) => usuarios.find(u => u.email === email),
-    adicionar: ({ nome, email, senha }) => {
-        const novo = { id: proximoId++, nome, email, senha };
-        usuarios.push(novo);
-        return novo;
+    listar: async () => {
+        const { rows } = await pool.query('SELECT * FROM usuarios');
+        return rows;
+    },
+    buscar: async (id) => {
+        const { rows } = await pool.query('SELECT * FROM usuarios WHERE id = $1', [id]);
+        return rows[0];
+    },
+    buscarPorEmail: async (email) => {
+        const { rows } = await pool.query('SELECT * FROM usuarios WHERE email = $1', [email]);
+        return rows[0];
+    },
+    adicionar: async ({ nome, email, senha }) => {
+        const { rows } = await pool.query('INSERT INTO usuarios (nome, email, senha) VALUES ($1, $2, $3) RETURNING *', [nome, email, senha]);
+        return rows[0];
     },
 
-    atualizar: (id, dados) => {
-        const idx = usuarios.findIndex(u => u.id === id);
-        if (idx === -1) return null;
-        usuarios[idx] = { ...usuarios[idx], ...dados, id};
-        return usuarios[idx];
+    atualizar: async (id, dados) => {
+        const { rows } = await pool.query('UPDATE usuarios SET nome = $1, email = $2, senha = $3 WHERE id = $4 RETURNING *', [dados.nome || null, dados.email || null, dados.senha || null, id]);
+        return rows[0] || null;
     },
 
-    remover: (id) => {
-        const idx = usuarios.findIndex(u => u.id === id);
-        if (idx === -1) return null;
-        return usuarios.splice(idx, 1)[0];
-},
+    remover: async (id) => {
+        const { rows } = await pool.query('DELETE FROM usuarios WHERE id = $1 RETURNING *', [id]);
+        return rows[0] || null;
+    }
 };

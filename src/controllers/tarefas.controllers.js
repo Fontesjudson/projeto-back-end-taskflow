@@ -6,9 +6,9 @@ const COLUNAS_VALIDAS     = ['afazer', 'andamento', 'concluido'];
 
 const tarefasController = {
 
-  listar(req, res) {
+ async listar(req, res) {
     const { coluna, usuarioId } = req.query;
-    let resultado = tarefaModel.listar();
+    let resultado = await tarefaModel.listar();
     if (coluna)    resultado = resultado.filter(t => t.coluna === coluna);
     if (usuarioId) resultado = resultado.filter(t => t.usuarioId === parseInt(usuarioId));
     res.json(resultado);
@@ -22,13 +22,13 @@ const tarefasController = {
     res.json({ resumo: tarefaModel.resumo() });
   },
 
-  buscarPorId(req, res) {
-    const tarefa = tarefaModel.buscar(parseInt(req.params.id));
+  async buscarPorId(req, res) {
+    const tarefa = await tarefaModel.buscar(parseInt(req.params.id));
     if (!tarefa) return res.status(404).json({ erro: 'Tarefa não encontrada' });
     res.json(tarefa);
   },
 
-  criar(req, res) {
+ criar(req, res) {
     const { texto, prioridade, coluna, usuarioId } = req.body;
     const dados ={...req.body,usuarioId: req.usuario.id};
     if (!texto)

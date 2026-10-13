@@ -1,34 +1,56 @@
-let tarefas = [
+/*let tarefas = [
   { id: 1, texto: 'Estudar Node',   prioridade: 'alta',  coluna: 'afazer',    usuarioId: 1, projetoId: null, concluidaEm: null },
   { id: 2, texto: 'Criar API',      prioridade: 'alta',  coluna: 'andamento', usuarioId: 1, projetoId: null, concluidaEm: null },
   { id: 3, texto: 'Testar Postman', prioridade: 'media', coluna: 'concluido', usuarioId: 1, projetoId: null, concluidaEm: null },
 ];
-let proximoId = 4;
+let proximoId = 4;*/
+
+const pool = require('../database/db').pool;
 
 module.exports = {
 
-  listar: () => tarefas,
+  listar: () => async () => {
+    const result = await pool.query('SELECT * FROM tarefas order by id');
+    return result.rows;
+  },
 
-  buscar: (id) => tarefas.find(t => t.id === id),
+  buscar: (id) => async () => {
+    const result = await pool.query('SELECT * FROM tarefas WHERE id = $1', [id]);
+    return result.rows[0] || null;
+  },
 
-  listarPorColuna: (coluna) => tarefas.filter(t => t.coluna === coluna),
+  listarPorColuna: async (coluna) => {
+    const result = await pool.query('SELECT * FROM tarefas WHERE coluna = $1', [coluna]);
+    return result.rows;
+  },
 
-  listarPorUsuario: (usuarioId) => tarefas.filter(t => t.usuarioId === usuarioId),
+  listarPorUsuario: async (usuarioId) => {
+    const result = await pool.query('SELECT * FROM tarefas WHERE usuarioId = $1', [usuarioId]);
+    return result.rows;
+  },
 
-  listarPorProjeto: (projetoId) => tarefas.filter(t => t.projetoId === projetoId),
+  listarPorProjeto: async (projetoId) => {
+    const result = await pool.query('SELECT * FROM tarefas WHERE projetoId = $1', [projetoId]);
+    return result.rows;
+  },
 
-  contarEmAndamentoPorUsuario: (usuarioId, excluirId) =>
-    tarefas.filter(t =>
-      t.usuarioId === usuarioId &&
-      t.coluna    === 'andamento' &&
-      t.id        !== excluirId
-    ).length,
+  contarEmAndamentoPorUsuario: async (usuarioId, excluirId) => {
+    const result = await pool.query(
+      'SELECT COUNT(*) FROM tarefas WHERE usuarioId = $1 AND coluna = $2 AND id != $3',
+      [usuarioId, 'andamento', excluirId]
+    );
+    return parseInt(result.rows[0].count);
+  },
 
-  contarPorProjeto: (projetoId) =>
-    tarefas.filter(t => t.projetoId === projetoId).length,
+  contarPorProjeto: async (projetoId) => {
+    const result = await pool.query('SELECT COUNT(*) FROM tarefas WHERE projetoId = $1', [projetoId]);
+    return parseInt(result.rows[0].count);
+  },
 
-  contarPorUsuario: (usuarioId) =>
-    tarefas.filter(t => t.usuarioId === usuarioId).length,
+  contarPorUsuario: async (usuarioId) => {
+    const result = await pool.query('SELECT COUNT(*) FROM tarefas WHERE usuarioId = $1', [usuarioId]);
+    return parseInt(result.rows[0].count);
+  },
 
   totalPorColuna: (lista) => ({
     afazer:    lista.filter(t => t.coluna === 'afazer').length,
@@ -71,8 +93,15 @@ module.exports = {
     );
   },
 
-  adicionar: ({ texto, prioridade, coluna, usuarioId, projetoId }) => {
-    const nova = {
+  adicionar: async ({ texto, prioridade, coluna, usuarioId, projetoId }) => {
+    const result = await pool.query(
+      'INSERT INTO tarefas (texto, prioridade, coluna, usuarioId, projetoId) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+      [texto, prioridade || 'media', coluna || 'afazer', usuarioId || null, projetoId || null]
+    );
+    return result.rows[0];
+  },
+
+   /* const nova = {
       id:          proximoId++,
       texto,
       prioridade:  prioridade || 'media',
@@ -82,25 +111,32 @@ module.exports = {
       concluidaEm: null,
     };
     tarefas.push(nova);
-    return nova;
+    return nova;*/
+  
+
+  atualizar: async (id, dados) => {
+    const { texto, prioridade, coluna, usuarioId } = dados;
+    const result = await pool.query(
+      'UPDATE tarefas SET texto = $1, prioridade = $2, coluna = $3, usuarioId = $4 WHERE id = $5 RETURNING *', [texto, prioridade, coluna, usuarioId, id]);
+    return result.rows[0] || null;
+
+    /*const updateQuery = 'UPDATE tarefas SET texto = $1, prioridade = $2, coluna = $3, usuarioId = $4 WHERE id = $5 RETURNING *';
+    const updateValues = [
+      dados.texto || tarefa.texto,
+      dados.prioridade || tarefa.prioridade,
+      dados.coluna || tarefa.coluna,
+      dados.usuarioId || tarefa.usuarioId,
+      dados.projetoId || tarefa.projetoId,
+      dados.concluidaEm,
+      id
+    ];
+
+    const { rows } = await pool.query(updateQuery, updateValues);
+    return rows[0];*/
   },
 
-  atualizar: (id, dados) => {
-    const idx = tarefas.findIndex(t => t.id === id);
-    if (idx === -1) return null;
-    if (dados.coluna === 'concluido' && tarefas[idx].coluna !== 'concluido') {
-      dados.concluidaEm = new Date().toISOString();
-    }
-    if (dados.coluna && dados.coluna !== 'concluido') {
-      dados.concluidaEm = null;
-    }
-    tarefas[idx] = { ...tarefas[idx], ...dados, id };
-    return tarefas[idx];
-  },
-
-  remover: (id) => {
-    const idx = tarefas.findIndex(t => t.id === id);
-    if (idx === -1) return null;
-    return tarefas.splice(idx, 1)[0];
+  remover: async (id) => {
+    const result = await pool.query('DELETE FROM tarefas WHERE id = $1 RETURNING *', [id]);
+    return result.rows[0] || null;
   },
 };

@@ -1,4 +1,4 @@
-let projetos = [ { id: 1, nome: 'projeto', descriçao: "teste" } ];
+/*let projetos = [ { id: 1, nome: 'projeto', descriçao: "teste" } ];
 let proximoId = 2;
 
 module.exports = {
@@ -20,4 +20,4 @@ module.exports = {
         if (idx === -1) return null;
         return projetos.splice(idx, 1)[0];
     },
-};
+};*/
