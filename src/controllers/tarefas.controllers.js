@@ -28,33 +28,35 @@ const tarefasController = {
     res.json(tarefa);
   },
 
- criar(req, res) {
-    const { texto, prioridade, coluna, usuarioId } = req.body;
-    const dados ={...req.body,usuarioId: req.usuario.id};
-    if (!texto)
-      return res.status(400).json({ erro: 'O campo texto é obrigatório' });
+ async criar(req, res) {
+    const { texto, idprioridade, coluna, usuario_Id, projeto_id, ordem } = req.body;
+    console.log('body:', {texto, idprioridade, coluna, usuario_Id, projeto_id, ordem });
+    //const dados ={...req.body,usuarioId: req.usuario.id};
+  //  if (!texto)
+    //  return res.status(400).json({ erro: 'O campo texto é obrigatório' });
 
-    if (prioridade && !PRIORIDADES_VALIDAS.includes(prioridade))
-      return res.status(400).json({ erro: 'Prioridade inválida. Use: alta, media ou baixa' });
+   // if (idprioridade && !PRIORIDADES_VALIDAS.includes(idprioridade))
+     // return res.status(400).json({ erro: 'Prioridade inválida. Use: alta, media ou baixa' });
 
-    if (coluna && !COLUNAS_VALIDAS.includes(coluna))
-      return res.status(400).json({ erro: 'Coluna inválida. Use: afazer, andamento ou concluido' });
+    //if (coluna && !COLUNAS_VALIDAS.includes(coluna))
+    //  return res.status(400).json({ erro: 'Coluna inválida. Use: afazer, andamento ou concluido' });
 
-    if (usuarioId) {
-      if (!usuarioModel.buscar(parseInt(usuarioId)))
-        return res.status(400).json({ erro: 'Usuário não encontrado' });
+   // if (usuario_Id) 
+    //   return res.status(400).json({ erro: 'O campo texto é obrigatório' });{
+    // if (!usuarioModel.buscar(parseInt(usuario_Id)))
+      //  return res.status(400).json({ erro: 'Usuário não encontrado' });
 
-      if (coluna === 'andamento' &&
-          tarefaModel.contarEmAndamentoPorUsuario(parseInt(usuarioId)) >= 2)
+      if (coluna === 'andamento' && await
+          tarefaModel.contarEmAndamentoPorUsuario(parseInt(usuario_Id)) >= 2)
         return res.status(400).json({
           erro: 'Limite de 2 tarefas em andamento por usuário atingido',
         });
-    }
+    
 
-    res.status(201).json(tarefaModel.adicionar(dados));
+    res.status(201).json(await tarefaModel.adicionar(req.body));
   },
 
-  atualizar(req, res) {
+  async atualizar(req, res) {
     const id = parseInt(req.params.id);
     const { prioridade, coluna, usuarioId } = req.body;
 

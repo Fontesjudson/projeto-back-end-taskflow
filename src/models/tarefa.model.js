@@ -93,10 +93,10 @@ module.exports = {
     );
   },
 
-  adicionar: async ({ texto, prioridade, coluna, usuarioId, projetoId }) => {
+  adicionar: async ({ texto, idprioridade, coluna, usuario_Id, projeto_id, ordem }) => {
     const result = await pool.query(
-      'INSERT INTO tarefas (texto, prioridade, coluna, usuarioId, projetoId) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-      [texto, prioridade || 'media', coluna || 'afazer', usuarioId || null, projetoId || null]
+      'INSERT INTO tarefas (texto, prioridade, coluna, usuarioId, projetoId, ordem) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+      [texto, idprioridade || 2, coluna || 'afazer', usuario_Id, projeto_id, ordem || 0]
     );
     return result.rows[0];
   },
