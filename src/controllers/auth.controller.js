@@ -2,13 +2,13 @@ const jwt = require('jsonwebtoken');
 const usuarioModel = require('../models/usuario.model');
 
 const authController = {
-  login(req, res) {
+  login: async (req, res) => {
     const { email, senha } = req.body;
 
     if (!email || !senha)
         return res.status(400).json({ erro: 'Email e senha sao obrigatorios'});
 
-    const usuario = usuarioModel.buscarPorEmail(email);
+    const usuario = await usuarioModel.buscarPorEmail(email);
     if (!usuario)
       return res.status(401).json({ erro: 'Credenciais inválidas' });
 

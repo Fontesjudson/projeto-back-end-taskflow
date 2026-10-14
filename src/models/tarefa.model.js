@@ -9,7 +9,7 @@ const pool = require('../database/db').pool;
 
 module.exports = {
 
-  listar: () => async () => {
+  listar: async () => {
     const result = await pool.query('SELECT * FROM tarefas order by id');
     return result.rows;
   },
