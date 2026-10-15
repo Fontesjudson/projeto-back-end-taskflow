@@ -1,3 +1,5 @@
+//const criarErro = require('../utils/criarErro');
+
 function validar(schema) {
     return function(req, res, next) {
         const erros = [];
@@ -19,7 +21,8 @@ function validar(schema) {
        
         }
         if (erros.length > 0)
-            return res.status(400).json({ erros });
+           // throw criarErro(400, erros.join(', '));
+           return res.status(400).json({ erros });
         next();
 
         if (regras.enum && !regras.enum.includes(valor)) {

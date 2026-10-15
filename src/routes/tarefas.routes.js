@@ -10,9 +10,9 @@ router.get('/estatisticas', tarefasController.estatisticas);
 router.get('/resumo', tarefasController.estatisticasResumo)
 
 router.get('/', tarefasController.listar);
+router.get('/:id', tarefasController.buscarPorId);
 router.post('/',  validar(schemas.usuario), tarefasController.criar);
 router.put('/:id', validar(schemas.usuario),tarefasController.atualizar);
-router.delete('/:id', tarefasController.remover);
 
 router.get('/:id', tarefasController.buscarPorId);
 

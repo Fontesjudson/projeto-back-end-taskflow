@@ -7,8 +7,9 @@ const schemas = require('../middlewares/schemas');
 
 router.get('/', usuariosController.listar);
 router.post('/', validar(schemas.usuario), usuariosController.criar);
-router.get('/:id', usuariosController.buscarPorId);
 router.put('/:id', validar(schemas.usuario), usuariosController.atualizar);
 router.delete('/:id', usuariosController.remover);
+
+router.get('/:id', usuariosController.buscarPorId);
 
 module.exports = router;

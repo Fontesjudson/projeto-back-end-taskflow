@@ -1,4 +1,5 @@
 const tarefaModel  = require('../models/tarefa.model');
+const criarErro = require('../../utils/criarErro');
 const usuarioModel = require('../models/usuario.model');
 
 const PRIORIDADES_VALIDAS = ['alta', 'media', 'baixa'];
@@ -24,7 +25,9 @@ const tarefasController = {
 
   async buscarPorId(req, res) {
     const tarefa = await tarefaModel.buscar(parseInt(req.params.id));
-    if (!tarefa) return res.status(404).json({ erro: 'Tarefa não encontrada' });
+    if (!tarefa)
+      throw criarErro(404, 'Tarefa não encontrada');
+    //res.status(404).json({ erro: 'Tarefa não encontrada' });
     res.json(tarefa);
   },
 
@@ -39,9 +42,10 @@ const tarefasController = {
     if (coluna === 'andamento' && usuario_Id) {
       const emAndamento = await tarefaModel.contarEmAndamentoPorUsuario(parseInt(usuario_Id));
       if (emAndamento >= 2) {
-        return res.status(400).json({
-          erro: 'Limite de 2 tarefas em andamento por usuário atingido',
-        });
+        throw criarErro(400, 'Limite de 2 tarefas em andamento por usuário atingido');
+       // return res.status(400).json({
+       //   erro: 'Limite de 2 tarefas em andamento por usuário atingido',
+     //   });
       }
     }
 
@@ -75,7 +79,8 @@ const tarefasController = {
 
   async remover(req, res) {
     const removida = await tarefaModel.remover(parseInt(req.params.id));
-    if (!removida) return res.status(404).json({ erro: 'Tarefa não encontrada' });
+    if (!removida) 
+    return res.status(404).json({ erro: 'Tarefa não encontrada' });
     res.json({ mensagem: 'Tarefa removida', tarefa: removida });
   },
 

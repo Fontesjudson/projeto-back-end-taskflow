@@ -9,6 +9,7 @@ const authRoutes = require('./src/routes/auth.routes');
 const tarefasRoutes = require('./src/routes/tarefas.routes');
 const usuariosRoutes = require('./src/routes/usuarios.routes');
 const projetosRoutes = require('./src/routes/projetos.routes');
+const tratarErros = require('./src/middlewares/erro.middlewares');
 
 const logger = require('./src/middlewares/logger');
 const validarContentType = require('./src/middlewares/validarContentType');
@@ -45,11 +46,11 @@ app.use('/auth', authRoutes);
 app.use('/usuarios', /*autenticar,*/ usuariosRoutes);
 app.use('/tarefas', /*autenticar,*/ tarefasRoutes);
 app.use('/projetos', /*autenticar,*/ projetosRoutes);
-
 app.use((req, res) => {
     res.status(404).json({
         erro: '*Rota não encontrada*' });
     });
+app.use(tratarErros);
 
 app.listen(PORTA, () => {
     console.log(`Servidor rodando em http://localhost:${PORTA}`);

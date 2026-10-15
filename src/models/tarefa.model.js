@@ -14,7 +14,7 @@ module.exports = {
     return result.rows;
   },
 
-  buscar: (id) => async () => {
+  buscar: async (id) => {
     const result = await pool.query('SELECT * FROM tarefas WHERE id = $1', [id]);
     return result.rows[0] || null;
   },
