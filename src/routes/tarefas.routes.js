@@ -7,7 +7,7 @@ const tarefasController = require('../controllers/tarefas.controllers')
 //const autenticar = require('../middlewares/autenticar')
 
 router.get('/estatisticas', tarefasController.estatisticas);
-router.get('/resumo', tarefasController.resumo)
+router.get('/resumo', tarefasController.estatisticasResumo)
 
 router.get('/', tarefasController.listar);
 router.post('/',  validar(schemas.usuario), tarefasController.criar);

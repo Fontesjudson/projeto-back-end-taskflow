@@ -6,7 +6,7 @@ const cors = require('cors');
 //const autenticar = require('./src/middlewares/autenticar');
 const { pool } = require ('./src/database/db');
 const authRoutes = require('./src/routes/auth.routes');
-//const tarefasRoutes = require('./src/routes/tarefas.routes');
+const tarefasRoutes = require('./src/routes/tarefas.routes');
 const usuariosRoutes = require('./src/routes/usuarios.routes');
 const projetosRoutes = require('./src/routes/projetos.routes');
 
@@ -43,7 +43,7 @@ app.get('/', (req, res) => {
 
 app.use('/auth', authRoutes);
 app.use('/usuarios', /*autenticar,*/ usuariosRoutes);
-//app.use('/tarefas', /*autenticar,*/ tarefasRoutes);
+app.use('/tarefas', /*autenticar,*/ tarefasRoutes);
 app.use('/projetos', /*autenticar,*/ projetosRoutes);
 
 app.use((req, res) => {
