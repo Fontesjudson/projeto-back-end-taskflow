@@ -11,8 +11,11 @@ router.get('/resumo', tarefasController.estatisticasResumo)
 
 router.get('/', tarefasController.listar);
 router.get('/:id', tarefasController.buscarPorId);
-router.post('/',  validar(schemas.usuario), tarefasController.criar);
-router.put('/:id', validar(schemas.usuario),tarefasController.atualizar);
+router.post('/',  validar(schemas.tarefa), tarefasController.criar);
+//router.put('/:id', idValido, validar(schemas.tarefa), controller.atualizar, tarefasController.atualizar);
+router.put('/:id', validar(schemas.id, 'params'),
+validar(schemas.tarefa), 
+tarefasController.atualizar);
 
 router.get('/:id', tarefasController.buscarPorId);
 

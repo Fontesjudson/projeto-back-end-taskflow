@@ -1,17 +1,25 @@
 //const criarErro = require('../utils/criarErro');
 
-function validar(schema) {
+function validar(schema, origem) {
     return function(req, res, next) {
+        const dados = req[origem || 'body'] || {};
         const erros = [];
         
         for (const campo in schema) {
             const regras = schema[campo];
-            const valor =req.body[campo];
+            const valor = dados [campo];
             const ausente =valor=== underfined || valor == null || valor === '';
 
-            if (regras.obrigatorio && ausente) {
-                erros.push(`O campo '${campo}' é obrigatorio`);
-                continue;
+            if (regras.tipo === 'inteiro') {
+                const numero = typeof valor === 'string' ? Number(valor) : valor;
+                if (!Number.isInteger(numero) || numero <= 0) {
+                    erros.push(`O campo '${campo}' deve ser um número inteiro positivo`);
+                } else if (regras.tipo && typeof valor !== regras.tipo) {
+                    erros.push(`O campo '${campo}' deve ser do tipo ${regras.tipo}`);
+                }
+            
+               // erros.push(`O campo '${campo}' é obrigatorio`);
+              //  continue;
             }
             if(!ausente && regras.tipo && typeof valor !== regras.tipo) {
                 erros.push(
@@ -21,8 +29,8 @@ function validar(schema) {
        
         }
         if (erros.length > 0)
-           // throw criarErro(400, erros.join(', '));
-           return res.status(400).json({ erros });
+            throw criarErro(400, 'Dados inválidos', erros);
+          // return res.status(400).json({ erros });
         next();
 
         if (regras.enum && !regras.enum.includes(valor)) {
