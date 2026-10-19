@@ -1,6 +1,3 @@
-/*let projetos = [ { id: 1, nome: 'projeto', descriçao: "teste" } ];
-let proximoId = 2;*/
-
 const pool = require('../database/db').pool;
 
 module.exports = {

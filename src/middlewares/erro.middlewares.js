@@ -3,8 +3,8 @@ function tratarErros (erro, req, res, next) {
    console.error('[ERRO]', erro.method, req.url, erro.message);
 
    const mensagem = status === 500 ? 'Erro interno do servidor' : erro.message;
-res.status(status).json({ erro: mensagem })};
+res.status(status).json({ erro: mensagem });
 
-//res.status(status).json({ erro: mensagem, detalhes: erro.detalhes });
-
+res.status(status).json({ erro: {mensagem, detalhes: erro.detalhes } });
+}
 module.exports = tratarErros;

@@ -4,13 +4,14 @@ const usuariosController = require('../controllers/usuarios.controllers');
 
 const validar = require('../middlewares/validar');
 const schemas = require('../middlewares/schemas');
+const idValido = validar(schemas.id, 'params');
+//const  listarPorPrioridade = require('../models/prioridade.model');
 
 router.get('/', usuariosController.listar);
 router.post('/', validar(schemas.usuario), usuariosController.criar);
-router.get('/:id', usuariosController.buscarPorId);
-router.put('/:id', validar(schemas.id, 'params'),
-  validar(schemas.usuario),
+router.get('/:id', idValido, usuariosController.buscarPorId);
+router.put('/:id', idValido, validar(schemas.usuario),
   usuariosController.atualizar);
-router.delete('/:id', usuariosController.remover);
+router.delete('/:id', idValido, usuariosController.remover);
 
 module.exports = router;

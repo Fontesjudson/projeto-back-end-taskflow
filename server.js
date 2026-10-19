@@ -3,16 +3,15 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 
-//const autenticar = require('./src/middlewares/autenticar');
 const { pool } = require ('./src/database/db');
 const authRoutes = require('./src/routes/auth.routes');
 const tarefasRoutes = require('./src/routes/tarefas.routes');
 const usuariosRoutes = require('./src/routes/usuarios.routes');
 const projetosRoutes = require('./src/routes/projetos.routes');
 const tratarErros = require('./src/middlewares/erro.middlewares');
-
+//const criarErro = require('./src/utils/criarErro');
 const logger = require('./src/middlewares/logger');
-const validarContentType = require('./src/middlewares/validarContentType');
+//const validarContentType = require('./src/middlewares/validarContentType');
 const temporizador = require('./src/middlewares/temporizador');
 
 const app = express();
@@ -32,9 +31,8 @@ app.use(cors({
     }
 });
 
-//app.use(cors());
 app.use(express.json());
-app.use(validarContentType);
+//app.use(validarContentType);
 app.use(logger);
 app.use(temporizador);
 
@@ -43,14 +41,12 @@ app.get('/', (req, res) => {
 });
 
 app.use('/auth', authRoutes);
-app.use('/usuarios', /*autenticar,*/ usuariosRoutes);
-app.use('/tarefas', /*autenticar,*/ tarefasRoutes);
-app.use('/projetos', /*autenticar,*/ projetosRoutes);
+app.use('/usuarios', usuariosRoutes);
+app.use('/tarefas', tarefasRoutes);
+app.use('/projetos', projetosRoutes);
 app.use((req, res) => {
     const rota = `${req.method} ${req.url}`;
     throw criarErro(404, `Rota ${rota} não encontrada`);
-  //  res.status(404).json({
-    //    erro: '*Rota não encontrada*' });
     });
 app.use(tratarErros);
 

@@ -3,20 +3,17 @@ const router = express.Router();
 
 const validar = require('../middlewares/validar');
 const schemas = require('../middlewares/schemas');
-const tarefasController = require('../controllers/tarefas.controllers')
-//const autenticar = require('../middlewares/autenticar')
+const tarefasController = require('../controllers/tarefas.controllers');
+//const  listarPorPrioridade = require('../models/prioridade.model');
+const idValido = validar(schemas.id, 'params');
 
 router.get('/estatisticas', tarefasController.estatisticas);
 router.get('/resumo', tarefasController.estatisticasResumo)
 
 router.get('/', tarefasController.listar);
-router.get('/:id', tarefasController.buscarPorId);
 router.post('/',  validar(schemas.tarefa), tarefasController.criar);
-//router.put('/:id', idValido, validar(schemas.tarefa), controller.atualizar, tarefasController.atualizar);
-router.put('/:id', validar(schemas.id, 'params'),
-validar(schemas.tarefa), 
-tarefasController.atualizar);
-
 router.get('/:id', tarefasController.buscarPorId);
+router.put('/:id', idValido, validar(schemas.tarefa), tarefasController.atualizar);
+router.delete('/:id', idValido, tarefasController.remover);
 
 module.exports = router;

@@ -1,6 +1,3 @@
-/*let usuarios = [ { id: 1, nome: "Alice", email: "alice@email.com", senha:"123456" } ];
-let proximoId = 2;*/
-
 const pool = require('../database/db').pool;
 
 module.exports = {

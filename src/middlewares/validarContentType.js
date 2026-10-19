@@ -5,7 +5,8 @@ function validarContentType(req, res, next) {
         if (!contentType || !contentType.includes('application/json')) {
             return res.status(415).json({ error: 'Content-Type inválido. Use application/json.' });
         }
-    }
+        }
+    
     next();
 }
 module.exports = validarContentType;

@@ -1,10 +1,3 @@
-/*let tarefas = [
-  { id: 1, texto: 'Estudar Node',   prioridade: 'alta',  coluna: 'afazer',    usuarioId: 1, projetoId: null, concluidaEm: null },
-  { id: 2, texto: 'Criar API',      prioridade: 'alta',  coluna: 'andamento', usuarioId: 1, projetoId: null, concluidaEm: null },
-  { id: 3, texto: 'Testar Postman', prioridade: 'media', coluna: 'concluido', usuarioId: 1, projetoId: null, concluidaEm: null },
-];
-let proximoId = 4;*/
-
 const pool = require('../database/db').pool;
 
 module.exports = {
@@ -31,6 +24,11 @@ module.exports = {
 
   listarPorProjeto: async (projetoId) => {
     const result = await pool.query('SELECT * FROM tarefas WHERE projetoId = $1', [projetoId]);
+    return result.rows;
+  },
+
+  listarPorPrioridade: async (idprioridade) => {
+    const result = await pool.query('SELECT * FROM tarefas WHERE idprioridade = $1', [idprioridade]);
     return result.rows;
   },
 
@@ -102,24 +100,23 @@ module.exports = {
   },
 
   atualizar: async (id, dados) => {
-    const { texto, prioridade, coluna, usuarioId } = dados;
+    const tarefaAtual = await pool.query('SELECT * FROM tarefas WHERE id = $1', [id]);
+    const concluidoEm = dados.coluna === 'concluido' ? new Date() : null;
+    const iniciadaEm = dados.coluna === 'andamento' 
+    && tarefaAtual.rows[0].iniciadaEm === null ? new Date() : tarefaAtual.rows[0].iniciadaEm;
     const result = await pool.query(
-      'UPDATE tarefas SET texto = $1, prioridade = $2, coluna = $3, usuarioId = $4 WHERE id = $5 RETURNING *', [texto, prioridade, coluna, usuarioId, id]);
+      `UPDATE tarefas SET 
+      texto = $1, 
+      idprioridade = $2,
+      coluna = $3, 
+      usuarioId = $4, 
+      projeto_id = $5, 
+      concluidaEm = $6, 
+      iniciadaEm = $7
+      WHERE id = $8
+      RETURNING *`, [dados.texto, dados.idprioridade, dados.coluna, dados.usuarioId, dados.projeto_id, concluidoEm, iniciadaEm, id]);
     return result.rows[0] || null;
 
-    /*const updateQuery = 'UPDATE tarefas SET texto = $1, prioridade = $2, coluna = $3, usuarioId = $4 WHERE id = $5 RETURNING *';
-    const updateValues = [
-      dados.texto || tarefa.texto,
-      dados.prioridade || tarefa.prioridade,
-      dados.coluna || tarefa.coluna,
-      dados.usuarioId || tarefa.usuarioId,
-      dados.projetoId || tarefa.projetoId,
-      dados.concluidaEm,
-      id
-    ];
-
-    const { rows } = await pool.query(updateQuery, updateValues);
-    return rows[0];*/
   },
 
   remover: async (id) => {
