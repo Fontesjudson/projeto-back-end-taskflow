@@ -1,15 +1,90 @@
 const pool = require('../database/db').pool;
+const prisma = require('../database/prisma');
+
+const incluirNomes = {
+  projetos: { select: { nome: true } },
+  usuarios: { select: { nome: true } },
+};
+
+function formatarTarefa(tarefa) {
+  const { projetos, usuarios, ...resto } = tarefa;
+  return {
+    ...resto,
+    projeto: projetos?.nome,
+    usuario: usuarios?.nome,
+  };
+}
 
 module.exports = {
 
   listar: async () => {
-    const result = await pool.query('SELECT * FROM tarefas order by id');
-    return result.rows;
+   const lista = await prisma.tarefas.findMany({
+    //  includes: incluirNomes,
+      texto: true,
+      coluna: true,
+      ordem: true,
+      projeto_id,
+      usuario_Id,
+      criado_em: true,
+      iniciada_em: true,
+      concluida_em: null,
+      prioridade: {
+        select: {
+          nome: true
+        }
+      },
+      projetos: {
+        select: {
+          nome: true
+        }
+      },
+      usuarios: {
+        select: {
+          nome: true
+        }
+      },
+      orderBy: { id: 'asc' },
+    });
+    return lista.map(formatarTarefa);
   },
 
   buscar: async (id) => {
-    const result = await pool.query('SELECT * FROM tarefas WHERE id = $1', [id]);
-    return result.rows[0] || null;
+    const result = await prisma.tarefas.findUnique({
+      where: { id: id },
+      select: {
+      texto: true,
+      coluna: true,
+      ordem: true,
+      projeto_id,
+      usuario_Id,
+      criado_em: true,
+      iniciada_em: true,
+      concluida_em: null,
+      ...tarefajoin
+      },
+      prioridade: {
+        select: {
+          nome: true
+        }
+      },
+      projetos: {
+        select: {
+          nome: true
+        }
+      },
+      usuarios: {
+        select: {
+          nome: true
+        }
+      },
+
+      where: { id },
+      include: incluirNomes,
+    });
+   // return tarefa.map(formatarTarefa)
+    return tarefa ? formatarTarefa(result) : null;
+    //const result = await pool.query('SELECT * FROM tarefas WHERE id = $1', [id]);
+   // return result.rows[0] || null;
   },
 
   listarPorColuna: async (coluna) => {
