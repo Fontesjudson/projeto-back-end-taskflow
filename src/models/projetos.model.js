@@ -1,13 +1,47 @@
 const pool = require('../database/db').pool;
+const prisma = require('../database/prisma')
 
 module.exports = {
     listar: async () => {
-        const result = await pool.query('SELECT * FROM projetos');
-        return result.rows;
+        const lista = await prisma.projetos.findMany({
+            id: true,
+            nome: true,
+            email: true,
+            usuario: {
+                select: {
+                    nome: true,
+                }
+            },
+            orderBy:{nome:'asc'}
+        })
+       // const result = await pool.query('SELECT * FROM projetos');
+        return (lista);
     },
     buscar: async (id) => {
-        const result = await pool.query('SELECT * FROM projetos WHERE id = $1', [id]);
-        return result.rows[0];
+         const buscar = await prisma.projetos.findUnique({
+            id: true,
+            nome: true,
+            descricao: true,
+            usuario_id,
+            criado_em,
+            usuario: {
+                select: {
+                    nome: true,
+                }
+            },
+            tarefas: {
+               select: {
+                id: true,
+                texto: true,
+               } 
+            },
+            orderBy:{nome:'asc'}
+        })
+       // const result = await pool.query('SELECT * FROM projetos');
+        return (buscar);
+
+      //  const result = await pool.query('SELECT * FROM projetos WHERE id = $1', [id]);
+       // return result.rows[0];
     },
     adicionar: async ({ nome, descriçao }) => {
         const result = await pool.query('INSERT INTO projetos (nome, descriçao) VALUES ($1, $2) RETURNING *', [nome, descriçao || null]);

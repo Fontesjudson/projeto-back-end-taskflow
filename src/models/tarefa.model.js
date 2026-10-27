@@ -4,14 +4,16 @@ const prisma = require('../database/prisma');
 const incluirNomes = {
   projetos: { select: { nome: true } },
   usuarios: { select: { nome: true } },
+  prioridades: { select: { descricao: true} },
 };
 
 function formatarTarefa(tarefa) {
-  const { projetos, usuarios, ...resto } = tarefa;
+  const { projetos, usuarios, prioridades, ...resto } = tarefa;
   return {
     ...resto,
     projeto: projetos?.nome,
     usuario: usuarios?.nome,
+    prioridades: prioridades?.descricao,
   };
 }
 
@@ -175,7 +177,24 @@ module.exports = {
   },
 
   atualizar: async (id, dados) => {
-    const tarefaAtual = await pool.query('SELECT * FROM tarefas WHERE id = $1', [id]);
+    const atual = await prisma.tarefas.findUnique({ where: { id } });
+    if (!atual) return null;
+
+    const tarefa = await prisma.tarefas.update({
+      where: { id },
+      data: {
+        texto: dados.texto,
+        coluna: dados.coluna,
+        idprioridade: Number(dados.idprioridade),
+        usuario_id: Number(dados.usuario_Id),
+        projeto_id: Number(dados.projeto_id),
+        iniciada_em: iniciadaEm,
+        concluida_em: concluidaEm
+      },
+      include: incluirNomes,
+    });
+    return formatarTarefa(tarefa);
+    /*const tarefaAtual = await pool.query('SELECT * FROM tarefas WHERE id = $1', [id]);
     const concluidoEm = dados.coluna === 'concluido' ? new Date() : null;
     const iniciadaEm = dados.coluna === 'andamento' 
     && tarefaAtual.rows[0].iniciadaEm === null ? new Date() : tarefaAtual.rows[0].iniciadaEm;
@@ -190,7 +209,7 @@ module.exports = {
       iniciadaEm = $7
       WHERE id = $8
       RETURNING *`, [dados.texto, dados.idprioridade, dados.coluna, dados.usuarioId, dados.projeto_id, concluidoEm, iniciadaEm, id]);
-    return result.rows[0] || null;
+    return result.rows[0] || null;*/
 
   },
 
