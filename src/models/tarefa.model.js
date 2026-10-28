@@ -62,7 +62,7 @@ module.exports = {
       criado_em: true,
       iniciada_em: true,
       concluida_em: null,
-      ...tarefajoin
+      ...incluirNomes
       },
       prioridade: {
         select: {
@@ -180,6 +180,11 @@ module.exports = {
     const atual = await prisma.tarefas.findUnique({ where: { id } });
     if (!atual) return null;
 
+    const tarefaAtual = await prisma.tarefas('SELECT * FROM tarefas WHERE id = $1', [id]);
+    const concluidoEm = dados.coluna === 'concluido' ? new Date() : null;
+    const iniciadaEm = dados.coluna === 'andamento' 
+    && tarefaAtual.rows[0].iniciadaEm === null ? new Date() : tarefaAtual.rows[0].iniciadaEm;
+
     const tarefa = await prisma.tarefas.update({
       where: { id },
       data: {
@@ -209,12 +214,21 @@ module.exports = {
       iniciadaEm = $7
       WHERE id = $8
       RETURNING *`, [dados.texto, dados.idprioridade, dados.coluna, dados.usuarioId, dados.projeto_id, concluidoEm, iniciadaEm, id]);
-    return result.rows[0] || null;*/
+   // return result.rows[0] || null;*/
 
   },
 
   remover: async (id) => {
-    const result = await pool.query('DELETE FROM tarefas WHERE id = $1 RETURNING *', [id]);
-    return result.rows[0] || null;
-  },
-};
+    try {
+    const tarefa = await prisma.tarefas.delete({
+      where: { id },
+      include: incluirNomes,
+    });
+    return formatarTarefa(tarefa);
+  }
+   catch (erro) {
+    if (erro.code === 'p2025' ) return null;
+    throw erro;
+  }
+},
+}
