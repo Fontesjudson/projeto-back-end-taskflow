@@ -3,6 +3,8 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 
+const swaggerUi = require('swagger-ui-express');
+const openapi = require('./src/docs/openapi')
 const { pool } = require ('./src/database/db');
 const authRoutes = require('./src/routes/auth.routes');
 const tarefasRoutes = require('./src/routes/tarefas.routes');
@@ -40,12 +42,13 @@ app.use(temporizador);
 app.get('/', (req, res) => {
     res.json({ mensagem: 'TaskFlow API funcionando!' });
 });
-
+app.use('./docs', swaggerUi.serve, swaggerUi.setup(openapi));
 app.use('/auth', authRoutes);
 app.use('/usuarios', usuariosRoutes);
 app.use('/tarefas', tarefasRoutes);
 app.use('/projetos', projetosRoutes);
 app.use('/prioridades', prioridadesRoutes);
+
 app.use((req, res) => {
     const rota = `${req.method} ${req.url}`;
     throw criarErro(404, `Rota ${rota} não encontrada`);
