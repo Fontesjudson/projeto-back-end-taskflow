@@ -19,13 +19,14 @@ module.exports = {
     },
     buscar: async (id) => {
          const buscar = await prisma.projetos.findUnique({
+            where: { id },
+            select: {
             id: true,
             nome: true,
             descricao: true,
-            usuario_id,
-            criado_em,
-            usuario: {
+            usuarios: {
                 select: {
+                    usuario_id: true,
                     nome: true,
                 }
             },
@@ -36,48 +37,29 @@ module.exports = {
                } 
             },
             orderBy:{nome:'asc'}
+        }
         })
         return (buscar);
     },
-    adicionar: async ({ nome, descriçao }) => {
+    adicionar: async ({ dados }) => {
           const adicionar = await prisma.projetos.create({
-            id: true,
-            nome: true,
-            descricao: true,
-            usuario_id,
-            criado_em,
-            usuario: {
-                select: {
-                    nome: true,
-                }
-            },
-            tarefas: {
-               select: {
-                id: true,
-                texto: true,
-               } 
-            },
-            orderBy:{nome:'asc'}
+            data: {
+            nome: dados.nome,
+            descricao: dados.descriçao || null,
+            usuario_id: dados.usuario_id,
+            }
           })
           return (adicionar)
+        
     },
     atualizar: async (id, dados) => {
         const atualizar = await prisma.projetos.update({
-            nome: true,
-            descricao: true,
-            usuario_id,
-            usuario: {
-                select: {
-                    nome: true,
-                }
-            },
-            tarefas: {
-               select: {
-                id: true,
-                texto: true,
-               } 
-            },
-            orderBy:{nome:'asc'}
+            where: { id },
+            data: {
+            nome: dados.nome,
+            descricao: dados.descricao || null,
+            usuario_id: dados.usuario_id,
+            }
           })
           return (atualizar)
         

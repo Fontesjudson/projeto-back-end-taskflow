@@ -42,7 +42,7 @@ app.use(temporizador);
 app.get('/', (req, res) => {
     res.json({ mensagem: 'TaskFlow API funcionando!' });
 });
-app.use('./docs', swaggerUi.serve, swaggerUi.setup(openapi));
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(openapi));
 app.use('/auth', authRoutes);
 app.use('/usuarios', usuariosRoutes);
 app.use('/tarefas', tarefasRoutes);
