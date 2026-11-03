@@ -3,11 +3,12 @@ const prisma = require('../database/prisma')
 
 const prioridadeModel = {
     listar: async () => {
-        return prisma.prioridades.findMany({
+        const resultado = await prisma.prioridades.findMany({
           where: { ativo: true },
           select: { id: true, descricao: true },
           orderBy: { id: 'asc' },
    });
+   return resultado;
   }
 };
 module.exports = prioridadeModel;

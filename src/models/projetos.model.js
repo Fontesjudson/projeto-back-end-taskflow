@@ -5,39 +5,13 @@ const traduzirErroPrisma = require('../../utils/traduzirErroPrisma')
 module.exports = {
     listar: async () => {
         const lista = await prisma.projetos.findMany({
-            id: true,
-            nome: true,
-            email: true,
-            usuario: {
-                select: {
-                    nome: true,
-                }
-            },
             orderBy:{nome:'asc'}
         })
         return (lista);
     },
     buscar: async (id) => {
          const buscar = await prisma.projetos.findUnique({
-            where: { id },
-            select: {
-            id: true,
-            nome: true,
-            descricao: true,
-            usuarios: {
-                select: {
-                    usuario_id: true,
-                    nome: true,
-                }
-            },
-            tarefas: {
-               select: {
-                id: true,
-                texto: true,
-               } 
-            },
-            orderBy:{nome:'asc'}
-        }
+            where: { id: id },
         })
         return (buscar);
     },
@@ -54,11 +28,11 @@ module.exports = {
     },
     atualizar: async (id, dados) => {
         const atualizar = await prisma.projetos.update({
-            where: { id },
+            where: { id: id },
             data: {
-            nome: dados.nome,
-            descricao: dados.descricao || null,
-            usuario_id: dados.usuario_id,
+            nome: dados.nome || undefined,
+            descricao: dados.descricao || undefined,
+            usuario_id: dados.usuario_id || undefined,
             }
           })
           return (atualizar)
@@ -67,7 +41,7 @@ module.exports = {
     remover: async (id) => {
         try {
         const remover = await prisma.projetos.delete({
-             where: { id },
+             where: { id: id },
           })
           return (remover) || traduzirErroPrisma;
         } catch (erro) {

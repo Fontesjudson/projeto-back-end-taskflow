@@ -1,4 +1,7 @@
 const tarefas = require('./tarefas.docs');
+const comum = require('./comum');
+const auth = require('./auth.docs');
+
 
 module.exports = {
   openapi: '3.0.3',
@@ -8,11 +11,20 @@ module.exports = {
     description: 'API do TaskFlow SENAI CT-GAS', 
   },
   servers: [{ url: 'http://localhost:3001', description: 'Local' }],
+  tags: [
+    { name: 'Autenticação', description: 'Login e token JWT' },
+    { name: 'tarefas', description: 'Cards do Kanban' },
+  ],
+
   security: [{ bearerAuth: [] }],
-  paths: { ...tarefas.paths },
+  paths: 
+  { ...auth.paths,
+    ...tarefas.paths,
+   },
+
 
     components: {
-     schemas: { /*...comum.schemas*/ ...tarefas.schemas },
+     schemas: { ...comum.schemas, ...tarefas.schemas },
      securitySchemes: {
       bearerAuth: {
        type: 'http',

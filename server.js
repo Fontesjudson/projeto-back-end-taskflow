@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 
+const SWAGGER_CDN = 'https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.17.14';
 const swaggerUi = require('swagger-ui-express');
 const openapi = require('./src/docs/openapi')
 const { pool } = require ('./src/database/db');
@@ -42,7 +43,15 @@ app.use(temporizador);
 app.get('/', (req, res) => {
     res.json({ mensagem: 'TaskFlow API funcionando!' });
 });
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(openapi));
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(openapi, {
+    customCssUrl: `${SWAGGER_CDN}/swagger-ui.css`,
+    customJs: [ 
+    `${SWAGGER_CDN}/swagger-ui-bundle.js`,
+    `${SWAGGER_CDN}/swagger-ui-standalone-preset.js`,
+    ]
+}
+));
+
 app.use('/auth', authRoutes);
 app.use('/usuarios', usuariosRoutes);
 app.use('/tarefas', tarefasRoutes);

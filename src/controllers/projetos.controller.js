@@ -1,17 +1,18 @@
+const criarErro = require('../../utils/criarErro');
 const projetoModel = require('../models/projeto.model');
 const tarefaModel  = require('../models/tarefa.model');
 
 const projetosController = {
 
-  listar(req, res) {
-    res.json(projetoModel.listar());
+  async listar(req, res) {
+    res.json(await projetoModel.listar());
   },
 
-  resumo(req, res) {
-    const projeto = projetoModel.buscar(parseInt(req.params.id));
-    if (!projeto) return res.status(404).json({ erro: 'Projeto não encontrado' });
+  async resumo(req, res) {
+    const projeto = await projetoModel.buscar(parseInt(req.params.id));
+    if (!projeto) throw criarErro(404, 'Projeto não encontrado');
 
-    const tarefas = tarefaModel.listarPorProjeto(projeto.id);
+    const tarefas = await tarefaModel.listarPorProjeto(projeto.id);
 
     res.json({
       projeto,
@@ -20,36 +21,34 @@ const projetosController = {
     });
   },
 
-  buscarPorId(req, res) {
-    const p = projetoModel.buscar(parseInt(req.params.id));
-    if (!p) return res.status(404).json({ erro: 'Projeto não encontrado' });
+  async buscarPorId(req, res) {
+    const p = await projetoModel.buscar(parseInt(req.params.id));
+    if (!p) throw criarErro(404, 'Projeto não encontrado');
     res.json(p);
   },
 
-  criar(req, res) {
+  async criar(req, res) {
     const { nome } = req.body;
-    if (!nome) return res.status(400).json({ erro: 'O campo nome é obrigatório' });
-    res.status(201).json(projetoModel.adicionar(req.body));
+    if (!nome) throw criarErro(400, 'O campo nome é obrigatório');
+    res.status(201).json(await projetoModel.adicionar(req.body));
   },
 
-  atualizar(req, res) {
-    const atualizado = projetoModel.atualizar(parseInt(req.params.id), req.body);
-    if (!atualizado) return res.status(404).json({ erro: 'Projeto não encontrado' });
+  async atualizar(req, res) {
+    const atualizado = await projetoModel.atualizar(parseInt(req.params.id), req.body);
+    if (!atualizado) throw criarErro(404, 'Projeto não encontrado');
     res.json(atualizado);
   },
 
-  remover(req, res) {
+  async remover(req, res) {
     const id = parseInt(req.params.id);
 
     if (!projetoModel.buscar(id))
-      return res.status(404).json({ erro: 'Projeto não encontrado' });
+      throw criarErro(404, 'Projeto não encontrado');
 
     if (tarefaModel.contarPorProjeto(id) > 0)
-      return res.status(400).json({
-        erro: 'Projeto possui tarefas associadas. Remova as tarefas antes de deletar o projeto.',
-      });
+      throw criarErro(400, 'Projeto possui tarefas associadas. Remova as tarefas antes de deletar o projeto.');
 
-    const removido = projetoModel.remover(id);
+    const removido = await projetoModel.remover(id);
     res.json({ mensagem: 'Projeto removido', projeto: removido });
   },
 
