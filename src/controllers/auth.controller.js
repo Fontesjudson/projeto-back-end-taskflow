@@ -3,7 +3,8 @@ const jwt = require('jsonwebtoken');
 const usuarioModel = require('../models/usuario.model');
 
 const authController = {
-  login: async (req, res) => {
+   async login(req, res) {
+    try {
     const { email, senha } = req.body;
 
     if (!email || !senha)
@@ -22,10 +23,13 @@ const authController = {
         { expiresIn: '8h' }
 );
 
-        res.json({
+       return res.json({
             token,
-            usuario: { id: usuario.id, nome: usuario.nome }
-        });
-},
+            usuario: { id: usuario.id, nome: usuario.nome }});
+} catch (erro) {
+        console.error(erro)('Erro no login:', erro);
+        return res.status(erro.status || 500).json({ erro: erro.message || 'Erro interno do servidor' });
+    }
+   }
 };
 module.exports = authController

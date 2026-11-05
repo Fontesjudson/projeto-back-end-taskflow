@@ -10,7 +10,7 @@ module.exports = {
     version: '1.0.0',
     description: 'API do TaskFlow SENAI CT-GAS', 
   },
-  servers: [{ url: 'http://localhost:3001', description: 'Local' }],
+  servers: [{ url: '/', description: 'Este sevidor' }],
   tags: [
     { name: 'Autenticação', description: 'Login e token JWT' },
     { name: 'tarefas', description: 'Cards do Kanban' },
@@ -31,7 +31,6 @@ module.exports = {
        scheme: 'bearer',
        bearerFormat: 'JWT',
 
-    // schemas: { ...comum.schemas, ...tarefas.schemas },
    },
   },
  },

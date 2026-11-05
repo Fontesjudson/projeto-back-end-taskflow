@@ -45,14 +45,10 @@ module.exports = {
   
     },
     buscarPorEmail: async (email) => {
-          const buscarEmail = await prisma.usuarios.findUnique({
+         return prisma.usuarios.findUnique({
             where: { email },
-            select: {
-            id: true,
-            nome: true,
-        }
         });
-        return (buscarEmail);
+       // return (buscarEmail);
 
     },
     adicionar: async ({ nome, email, senha }) => {
