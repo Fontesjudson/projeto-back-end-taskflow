@@ -12,5 +12,5 @@ function corsMiddlewares(req, res, next) {
                 return res.sendStatus(200);
             }
             next();
-}
+};
 module.exports = corsMiddlewares;
