@@ -1,5 +1,6 @@
 const pool = require('../database/db').pool;
 const prisma = require('../database/prisma');
+const formatarTarefa = require('../../utils/formatarTarefa');
 
 const incluirNomes = {
   projetos: { select: { nome: true } },
@@ -7,7 +8,7 @@ const incluirNomes = {
   prioridades: { select: { descricao: true} },
 };
 
-function formatarTarefa(tarefa) {
+/*function formatarTarefa(tarefa) {
   const { projetos, usuarios, prioridades, ...resto } = tarefa;
   return {
     ...resto,
@@ -15,13 +16,12 @@ function formatarTarefa(tarefa) {
     usuario: usuarios?.nome,
     prioridades: prioridades?.descricao,
   };
-}
+}*/
 
 module.exports = {
 
   listar: async () => {
    const lista = await prisma.tarefas.findMany({
-    //  includes: incluirNomes,
       texto: true,
       coluna: true,
       ordem: true,
@@ -83,10 +83,7 @@ module.exports = {
       where: { id },
       include: incluirNomes,
     });
-   // return tarefa.map(formatarTarefa)
     return tarefa ? formatarTarefa(result) : null;
-    //const result = await pool.query('SELECT * FROM tarefas WHERE id = $1', [id]);
-   // return result.rows[0] || null;
   },
 
   listarPorColuna: async (coluna) => {
@@ -199,23 +196,6 @@ module.exports = {
       include: incluirNomes,
     });
     return formatarTarefa(tarefa);
-    /*const tarefaAtual = await pool.query('SELECT * FROM tarefas WHERE id = $1', [id]);
-    const concluidoEm = dados.coluna === 'concluido' ? new Date() : null;
-    const iniciadaEm = dados.coluna === 'andamento' 
-    && tarefaAtual.rows[0].iniciadaEm === null ? new Date() : tarefaAtual.rows[0].iniciadaEm;
-    const result = await pool.query(
-      `UPDATE tarefas SET 
-      texto = $1, 
-      idprioridade = $2,
-      coluna = $3, 
-      usuarioId = $4, 
-      projeto_id = $5, 
-      concluidaEm = $6, 
-      iniciadaEm = $7
-      WHERE id = $8
-      RETURNING *`, [dados.texto, dados.idprioridade, dados.coluna, dados.usuarioId, dados.projeto_id, concluidoEm, iniciadaEm, id]);
-   // return result.rows[0] || null;*/
-
   },
 
   remover: async (id) => {
