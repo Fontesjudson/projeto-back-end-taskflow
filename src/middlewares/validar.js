@@ -8,7 +8,7 @@ function validar(schema, origem) {
         for (const campo in schema) {
             const regras = schema[campo];
             const valor = dados [campo];
-            const ausente = valor === underfined || valor == null || valor === '';
+            const ausente = valor === undefined || valor == null || valor === '';
 
             if (regras.tipo === 'inteiro') {
                 const numero = typeof valor === 'string' ? Number(valor) : valor;
@@ -37,7 +37,8 @@ function validar(schema, origem) {
 
         }
         if (erros.length > 0)
-            throw criarErro(400, 'Dados inválidos', erros);
+          //  throw criarErro(400, 'Dados inválidos', erros);
+        return res.status(400).json({ erro: { mensagem: 'Dados inválidos', detalhes: erros } });
         next();
 
 

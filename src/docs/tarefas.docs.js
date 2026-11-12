@@ -66,12 +66,35 @@ const paths = {
 
 
 const schemas = {
-    Tarefa: { type: 'object', properties: {
-    id: { type: 'integer', example: 1 },
+    Tarefa: { 
+      type: 'object', 
+      properties: {
+      id: { type: 'integer', example: 1 },
+      texto: { type: 'string', example: 'Revisar layout' },
+      coluna: { type: 'string', enum: ['afazer', 'andamento', 'concluido'] },
+      ordem: { type: 'integer', example: 0 },
+      usuario_id: { type: 'integer', example: 1 },
+      projeto_id: { type: 'integer', example: 1 },
+      idprioridade: { type: 'integer', example: 2 },
+      criado_em: { type: 'string', format: 'date-time' },
+      iniciada_em: { type: 'string', format: 'date-time', nullable: true },
+      concluida_em: { type: 'string', format: 'date-time', nullable: true },
+      projeto: { type: 'string', example: 'TaskFlow' },
+      usuario: { type: 'string', example: 'Ana Lima' },
+      prioridade: { type: 'string', example: 'Médio' },
+}, }, 
+
+TarefaEntrada: {
+  type: 'object',
+  properties: {
     texto: { type: 'string', example: 'Revisar layout' },
     coluna: { type: 'string', enum: ['afazer', 'andamento', 'concluido'] },
-    iniciada_em: { type: 'string', format: 'date-time', nullable: true },
-} },
+    usuario_id: { type: 'integer', example: 1 },
+    projeto_id: { type: 'integer', example: 1 },
+    idprioridade: { type: 'integer', example: 2 },
+    ordem: { type: 'integer', example: 0 },
+  }, },
 };
+
 
 module.exports = { paths, schemas };
