@@ -1,5 +1,6 @@
 require('./app');
 
+const express = require('express')
 const { pool } = require ('./src/database/db');
 const app = express();
 const PORTA = process.env.PORTA || 3001;
