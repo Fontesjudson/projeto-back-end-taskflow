@@ -1,4 +1,4 @@
-const pool = require('../database/db').pool;
+//const pool = require('../database/db').pool;
 const prisma = require('../database/prisma')
 
 module.exports = {

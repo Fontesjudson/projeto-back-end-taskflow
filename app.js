@@ -1,0 +1,57 @@
+require('dotenv').config();
+
+const express = require('express');
+const cors = require('cors');
+
+const SWAGGER_CDN = 'https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.17.14';
+const swaggerUi = require('swagger-ui-express');
+const openapi = require('./src/docs/openapi')
+const authRoutes = require('./src/routes/auth.routes');
+const tarefasRoutes = require('./src/routes/tarefas.routes');
+const usuariosRoutes = require('./src/routes/usuarios.routes');
+const projetosRoutes = require('./src/routes/projetos.routes');
+const prioridadesRoutes = require('./src/routes/prioridades.routes');
+const tratarErros = require('./src/middlewares/erro.middlewares');
+const criarErro = require('./utils/criarErro');
+const logger = require('./src/middlewares/logger');
+const validarContentType = require('./src/middlewares/validarContentType');
+const temporizador = require('./src/middlewares/temporizador');
+
+const app = express();
+
+app.use(cors({
+    origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeader: ['Content-Type', 'Authorization'],   
+ }));
+
+app.use(express.json());
+app.use(validarContentType);
+app.use(logger);
+app.use(temporizador);
+
+app.get('/', (req, res) => {
+    res.json({ mensagem: 'TaskFlow API funcionando!' });
+});
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(openapi, {
+    customCssUrl: `${SWAGGER_CDN}/swagger-ui.css`,
+    customJs: [ 
+    `${SWAGGER_CDN}/swagger-ui-bundle.js`,
+    `${SWAGGER_CDN}/swagger-ui-standalone-preset.js`,
+    ]
+}
+));
+
+app.use('/auth', authRoutes);
+app.use('/usuarios', usuariosRoutes);
+app.use('/tarefas', tarefasRoutes);
+app.use('/projetos', projetosRoutes);
+app.use('/prioridades', prioridadesRoutes);
+
+app.use((req, res) => {
+    const rota = `${req.method} ${req.url}`;
+    throw criarErro(404, `Rota ${rota} não encontrada`);
+    });
+app.use(tratarErros);
+
+module.exports = app;

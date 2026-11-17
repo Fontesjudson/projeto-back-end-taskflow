@@ -5,6 +5,6 @@ describe('criarErro', () => {
    const erro = criarErro(404, 'Tarafa nao encontrada');
     expect(erro).toBeInstanceOf(Error);
     expect(erro.status).toBe(404);
-    expect(erro.message).toBe('Tarafa nao encontrada');
+    expect(erro.message).toBe('Tarefa não encontrada');
   });
 });
