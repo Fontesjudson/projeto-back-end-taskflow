@@ -1,4 +1,4 @@
-//const criarErro = require('../utils/criarErro');
+const criarErro = require('../../utils/criarErro');
 
 function validar(schema, origem) {
     return function(req, res, next) {
@@ -10,60 +10,49 @@ function validar(schema, origem) {
             const valor = dados [campo];
             const ausente = valor === undefined || valor == null || valor === '';
 
-            if (regras.tipo === 'inteiro') {
-                const numero = typeof valor === 'string' ? Number(valor) : valor;
-                if (!Number.isInteger(numero) || numero <= 0) {
-                    erros.push(`O campo '${campo}' deve ser um número inteiro positivo`);
-                } else if (regras.tipo && typeof valor !== regras.tipo) {
-                    erros.push(`O campo '${campo}' deve ser do tipo ${regras.tipo}`);
-                }
+           if (regras.obrigatorio && ausente) {
+        erros.push(`O campo '${campo}' é obrigatório`);
+        continue; 
+      }
+      
+      if (ausente) continue; 
 
-                if (regras.obrigatorio && ausente) {
-                    erros.push(`O campo '${campo}' é obrigatorio`);
-                    continue;
-                }
-            }
-    
-          if (ausente) continue;
-
-          if (regras.tipo === 'inteiro') {
-            const numeros = typeof valor === 'string' ? Number(valor) : valor;
-            if (!Number.isInteger(numeros) || numeros <= 0) {
-                erros.push(`O campo '${campo}' deve ser um número inteiro positivo`);
-            }
-          } else if (regras.tipo && typeof valor !== regras.tipo) {
-            erros.push(`O campo '${campo}' deve ser do tipo ${regras.tipo}`);
-          }
-
+      if (regras.tipo === "inteiro") {
+        const numero = typeof valor === "string" ? Number(valor) : valor;
+        if (!Number.isInteger(numero) || numero <= 0) {
+          erros.push(`O campo '${campo}' deve ser inteiro positivo`);
         }
-        if (erros.length > 0)
-          //  throw criarErro(400, 'Dados inválidos', erros);
-        return res.status(400).json({ erro: { mensagem: 'Dados inválidos', detalhes: erros } });
-        next();
+      } else if (regras.tipo && typeof valor !== regras.tipo) {
+          erros.push(`O campo '${campo}' deve ser do tipo ${regras.tipo}`);
+      }
 
+      if (regras.enum && !regras.enum.includes(valor)) {
+        erros.push(
+          `O campo '${campo}' deve ser um de: ${regras.enum.join(", ")}`,
+        );
+      }
 
+      if (regras.formato === "email") {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!re.test(valor))
+          erros.push(`O campo '${campo}' deve ser um email válido`);
+      }
 
-        if (regras.enum && !regras.enum.includes(valor)) {
-            erros.push(
-                'O campo "${campo}" deve ser um de: ${regras.enum.join(', ')}'
-            );
-        }
-
-        if (regras.formato === 'email') {
-            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!re.test(valor))
-                erros.push('O campo "${campo}" deve ser um email valido');
-
-            if (regras.minLength && valor.length < regras.minLength)
-                erros.push(
-           `O campo '${campo}' deve ter ao menos ${regras.minLength} caracteres`
+      if (regras.minLength && valor.length < regras.minLength)
+        erros.push(
+          `O campo '${campo}' deve ter ao menos ${regras.minLength} caracteres`,
         );
 
-        if (regras.maxLength && valor.length > regras.maxLength)
-            erros.push(
-       `O campo '${campo}' deve ter no máximo ${regras.maxLength} caracteres`
-    );
-        };
-    };
-};
+      if (regras.maxLength && valor.length > regras.maxLength)
+        erros.push(
+          `O campo '${campo}' deve ter no máximo ${regras.maxLength} caracteres`,
+        );
+    }
+
+    if (erros.length > 0) {
+      throw criarErro(400, "Dados inválidos", erros);
+    }   
+    next();
+  };
+}
 module.exports = validar;

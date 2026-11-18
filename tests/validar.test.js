@@ -11,7 +11,7 @@ function pegarErro(funcao) {
 
 function tarefavalida() {
     return {
-        texto: 'Revisar o plano de texto',
+        texto: 'Revisar o plano de teste',
         coluna: 'afazer',
         usuario_id: 1,
         projeto_id: 1,
@@ -21,14 +21,16 @@ function tarefavalida() {
 
 describe('validar', () => {
     test('chama o next quando os dados estão certos', () => {
-        const middlewares = validar(schemas.criarTarefa);
+        const middlewares = validar(schemas.tarefa);
         const req = { body: tarefaValida() };
         const next = jest.fn();
+
         middlewares(req, {} , next);
+
         expect(next).toHaveBeenCalledTimes(1);
         expect(next).toHaveBeenCalledWith();
     });
-})
+
 
 test('sem body: 400 com um detalhe por campo obrigatório', () => {
 const middleware = validar(schemas.tarefa);
@@ -36,6 +38,7 @@ const req = {};
 const next = jest.fn();
 
 const erro = pegarErro(() => middleware(req, {}, next));
+
 expect(erro.status).toBe(400);
 expect(erro.message).toBe('Dados inválidos');
 expect(erro.detalhes).toEqual([
@@ -46,4 +49,44 @@ expect(erro.detalhes).toEqual([
 "O campo 'idprioridade' é obrigatório",
 ]);
 expect(next).not.toHaveBeenCalled();
+});
+
+test('coluna fora da lista: diz os valores aceitos', () => {
+    const middlewares = validar(schemas.tarefa);
+    const req = { body: { ...tarefaValida(), coluna: 'feito' } };
+    const next = jest.fn()
+
+    const erro = pegarErro(() => middleware(req, {}, next));
+
+    expect(erro.detalhes).toEqual([
+        'O campo coluna dever ser um de: afazer, andamento , concluido',
+    ]);
+    expect(next).not.toHaveBeenCalled();
+});
+
+test('id da URL: aceita "7" e barra "abc"', () => {
+    const middleware = validar(schemas.id, 'params');
+    const nextBom = jest.fn();
+    const nextRuim = jest.fn();
+
+    middleware({ params: { id: '7'}}, {}, nextBom);
+    const erro = pegarErro(() => 
+    middleware({ params: { id: 'abc' } }, {}, nextRuim));
+
+    expect(nextBom).toHaveBeenCalledTimes(1);
+    expect(erro.detalhes).toEqual([
+        'O campo "id" deve ser inteiro positivo'
+    ]);
+    expect(nextRuim).not.toHaveBeenCalled();
+})
+
+test('O campo geracional enviado não gera erro', () => {
+    const middleware = validar(schemas.projeto);
+    const req = { body: { nome: 'TaskFlow'} };
+    const next = jest.fn();
+
+    middleware(req, {}, next);
+
+    expect(next).toHaveBeenCalledTimes(1);
+  })
 });

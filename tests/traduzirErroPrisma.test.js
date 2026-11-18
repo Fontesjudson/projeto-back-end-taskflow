@@ -3,10 +3,9 @@ const traduzirErroPrisma = require('../utils/traduzirErroPrisma');
 const erroP2002 = { code: 'p2002', meta: { target: ['email'] } };
 const erroP2003 = { code: 'p2003' };
 
-describe('traduzirErroPrisma', () => {
-test('p2002, (valor repetido) vira 400 e diz o campo repetido', () => {
+test('p2002, (valor repetido) vira 409 e diz o campo repetido', () => {
     const erro = traduzirErroPrisma(erroP2002, 'POST');
-    expect(erro.status).toBe(400);
+    expect(erro.status).toBe(409);
     expect(erro.detalhes).toEqual(['valor repetido em: email']);
 });
 
@@ -24,9 +23,8 @@ test('p2025 (registro não encontrado) vira 404', () => {
 });
 
 test('codigo nao tratado devolve o MESMO erro, o que vira 500', () => {
-    const outro = { code: 'p1001', menssagem: 'banco fora do ar' };
-    const erro = traduzirErroPrisma(erroPrisma, 'GET');
-    expect(outro).toBe(erro);
+    const outro = { code: 'p1001', message: 'banco fora do ar' };
+    const erro = traduzirErroPrisma(outro, 'GET');
+    expect(erro).toBe(outro);
     expect(erro.status).toBeUndefined();
 });
-})

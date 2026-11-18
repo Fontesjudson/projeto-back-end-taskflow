@@ -4,45 +4,32 @@ const criarErro = require('../utils/criarErro');
 const p2003 = { code: 'p2003' };
 const p2025 = { code: 'p2025' };
 
-describe('siute de testes', () => {
-  it('deve traduzir o erro p2002 para um erro 409', () => {
-    const erro = { code: 'p2002', meta: { target: ['campo1', 'campo2'] } };
-    const resultado = traduzirErroPrisma(erro);
-    expect(resultado).toEqual(criarErro(409, 'Já existe um registro com esse valor', ['valor repetido em: ${campos}']));
+describe('suite de testes', () => {
+  test('1. criarErro(500, ...) tem status 500 e detalhes underfined', () => {
+    const erro = criarErro(500, 'Erro interno no servidor');
+    
+    expect(erro.status).toBe(500);
+    expect(erro.detalhes).toBeUnderfined();
+  });
+
+
+test('2. P2003 ao atualizar (PUT) vira 400 com mensagem certa', () => {
+    const erro = traduzirErroPrisma({ code: 'P2003'}, 'PUT');
+
+    expect(erro.status).toBe(400);
+    expect(erro.detalhes).toBe("Um dos id's informados não existe");
+});
+
+test('3. P2025 tem a mensagem "Registro não encontrado"', () => {
+    const erro = traduzirErroPrisma({ code: 'P2025'}, 'DELETE')
+
+    expect(erro.message).toBe('Registro não encontrado');
+});
+
+test('4. P2003 ao excluir tem a mensagem que diz o motivo', () => {
+    const erro = traduzirErroPrisma({ code: 'P2003'}, 'DELETE');
+   
+    expect(erro.message).toBe('Não é possível excluir: existem registros ligados a este');
   });
 })
-
-test('p2003 ao atualizar (PUT) vira 409', () => {
-    expect(traduzirErroPrisma(p2003, 'PUT').status).toBe(409);
-});
-
-test('p2003 ao gravar (PUT) vira 404', () => {
-    expect(criarErro(404, 'Um dos ids informados não existe').status).toBe(404);
-});
-
-test('p2025 (registro não encontrado)', () => {
-    const erro = traduzirErroPrisma(p2025, 'PUT');
-    expect(erro.status).toBe(404);
-    expect(erro.message).toBe('Registro não encontrado');
-})
-
-test('p2025 (registro não encontrado) ao deletar (DELETE)', () => {
-    const erro = criarErro(404, 'Registro não encontrado');
-    expect(erro.status).toBe(404);
-    expect(erro.message).toBe('Registro não encontrado');
-})
-
-test('p2003 (DELETE) não é possivel excluir: existem registros ligados a este', () => {
-    const erro = traduzirErroPrisma(p2003, 'DELETE');
-    expect(erro.status).toBe(409);
-    expect(erro.message).toBe('Não é possivel excluir: existem registros ligados a este');
-});
-
-test('p2003 (DELETE) não é possivel excluir: existem registros ligados a este', () => {
-    const erro= criarErro(409, 'Não é possivel excluir: existem registros ligados a este');
-    expect(erro.status).toBe(409);
-    expect(erro.message).toBe('Não é possivel excluir: existem registros ligados a este');
-});
-
-
 

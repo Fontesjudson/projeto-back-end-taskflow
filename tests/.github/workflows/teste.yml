@@ -1,0 +1,34 @@
+name: Teste da API
+
+on:
+ push: 
+   branches: [main]
+ pull request:
+   bramches: [main]
+
+jobs:
+  testes-api:
+    runs-on: ubuntu-latest
+
+    #variaveis dos testes (os segredos vem do cofre)
+    env:
+      DATABASE-URL: ${{ secrets.DATABASE-URL }}
+      DIRECT_URL: ${{ secrets.DIRECT_URL }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      AMBIENTE: teste
+
+      steps:
+        - name: Baixar o código
+          uses: actions/checkout@v6
+
+        - name: Instalar o Node
+          uses: actions/setup-node@v6
+          with:
+            node-version: 22
+            cache: npm
+
+        - name: instalar as dependencias
+          run: npm ci
+
+        - name: Rodar os testes 
+          run: npm test          
