@@ -9,7 +9,7 @@ function pegarErro(funcao) {
    }
 }
 
-function tarefavalida() {
+function tarefaValida() {
     return {
         texto: 'Revisar o plano de teste',
         coluna: 'afazer',
@@ -52,7 +52,7 @@ expect(next).not.toHaveBeenCalled();
 });
 
 test('coluna fora da lista: diz os valores aceitos', () => {
-    const middlewares = validar(schemas.tarefa);
+    const middleware = validar(schemas.tarefa);
     const req = { body: { ...tarefaValida(), coluna: 'feito' } };
     const next = jest.fn()
 

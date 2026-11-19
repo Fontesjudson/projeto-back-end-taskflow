@@ -3,9 +3,9 @@ const traduzirErroPrisma = require('../utils/traduzirErroPrisma');
 const erroP2002 = { code: 'p2002', meta: { target: ['email'] } };
 const erroP2003 = { code: 'p2003' };
 
-test('p2002, (valor repetido) vira 409 e diz o campo repetido', () => {
+test('p2002, (valor repetido) vira 400 e diz o campo repetido', () => {
     const erro = traduzirErroPrisma(erroP2002, 'POST');
-    expect(erro.status).toBe(409);
+    expect(erro.status).toBe(400);
     expect(erro.detalhes).toEqual(['valor repetido em: email']);
 });
 

@@ -30,7 +30,7 @@ test('rota que não existe responde 404', async () => {
    const resposta = await request(app).get('/nao-existe');
 
    expect(resposta.status).toBe(404);
-   expect(resposta.body.erro.mensagem).toBe('Rota não encontrada');
+   expect(resposta.body.ero.mensagem).toBe('Rota não encontrada');
 });
 
 test('GET /tarefas sem token responde 401', async () => {

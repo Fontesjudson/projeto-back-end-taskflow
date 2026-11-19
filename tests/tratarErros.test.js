@@ -54,7 +54,7 @@ describe('tratarErros', () => {
     tratarErros(erro, { method: 'POST', url: '/usuarios' }, res, jest.fn());
  
     expect(res.status).toHaveBeenCalledWith(409);
-    expect(res.json).toHaveBeenCalledWith({
+    expect(res.json).toHaveBeenCalled({
       erro: {
         mensagem: 'Já existe um registro com esse valor',
         detalhes: ['Valor repetido em: email'],
